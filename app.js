@@ -4,12 +4,34 @@ const app = express();
 const router = require("./router");
 const router_bssr = require("./router_bssr");
 
+let session = require("express-session");
+const MongoDbStore = require("connect-mongodb-session")(session);
+const store = new MongoDbStore({
+  uri: process.env.MONGO_URL,
+  collection: "sessions",
+});
+
 // 1: Kirish kodlari.
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false })); //formdan post qilingan narsalarni express qabul qiladi.
 
 // 2 Session larga bog'liq bo'lgan codelar yoziladi
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+      maxAge: 1000 * 60 * 30, //for 30 minutes
+    },
+    store: store,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use((req, res, next) => {
+  res.locals.member = req.session.member;
+  next();
+});
 
 // 3 View code
 app.set("views", "views");
