@@ -29,7 +29,7 @@ restaurantController.signupProcess = async (req, res) => {
       member = new Member(),
       new_member = await member.signupData(data);
 
-    req.session.member = new_member;
+    req.session.member = new_member; //app js da yasalgan session = memberiga signup data= resultini save qilamiz.
 
     res.redirect("/resto/products/menu");
   } catch (err) {

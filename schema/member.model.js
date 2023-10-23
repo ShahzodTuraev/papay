@@ -6,7 +6,7 @@ const {
   ordinary_enums,
 } = require("../lib/config");
 
-const memberScheme = new mongoose.Schema(
+const memberSchema = new mongoose.Schema(
   {
     mb_nick: {
       type: String,
@@ -92,4 +92,4 @@ const memberScheme = new mongoose.Schema(
   { timestamps: true } //createdAt, updatedAt
 );
 
-module.exports = mongoose.model("Member", memberScheme);
+module.exports = mongoose.model("Member", memberSchema);
