@@ -18,6 +18,22 @@ class Product {
       throw err;
     }
   }
+  async updateChosenProductData(id, updated_data, mb_id) {
+    try {
+      id = shapeIntoMongooseObjectId(id);
+      const result = await this.productModel
+        .findOneAndUpdate({ _id: id, restaurant_mb_id: mb_id }, updated_data, {
+          runValidators: true,
+          lean: true,
+          returnDocument: "after", //yangilangan datani beradi. 'before' bolsa uzgarishdan keyingi datani beradi.
+        })
+        .exec();
+      assert.ok(result, Definer.general_err1);
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 module.exports = Product;
