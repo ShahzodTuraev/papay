@@ -19,6 +19,7 @@ productController.addNewProduct = async (req, res) => {
     assert(req.files, Definer.general_err3);
     const product = new Product();
     let data = req.body; //req.bodyni ichida file path yoq. U reqfilesni ichida keladi.
+    console.log(req.files);
     data.product_images = req.files.map((ele) => {
       return ele.path;
     });

@@ -67,7 +67,7 @@ const productSchema = new mongoose.Schema(
     restaurant_mb_id: {
       //population qilishimiz mumkin yoki aggregation qilishimiz mumkin
       type: Schema.Types.ObjectId,
-      ref: "Member",
+      ref: "Member", //qaysi collectionga bog'langan
       required: false,
     },
   },
