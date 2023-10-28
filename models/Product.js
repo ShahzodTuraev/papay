@@ -15,6 +15,7 @@ class Product {
         restaurant_mb_id: member._id,
       });
       assert.ok(result, Definer.general_err1);
+      console.log(result);
       return result; //arrayda restaurant productlar= obj ni chiqaradi
     } catch (err) {
       throw err;
