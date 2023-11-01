@@ -29,7 +29,7 @@ class Member {
   async loginData(input) {
     try {
       const member = await this.memberModel
-        .findOne({ mb_nick: input.mb_nick }, { mb_nick: 1, mb_password: 1 })
+        .findOne({ mb_nick: input.mb_nick }, { mb_nick: 1, mb_password: 1 }) //pasword shuni quymasa kelmaydi. negaki sxema modulda password kelmasin deb mantiq qushganmiz.
         .exec();
       assert.ok(member, Definer.auth_err3);
       console.log(member);

@@ -56,6 +56,7 @@ restaurantController.getLoginMyRestaurant = async (req, res) => {
   } catch (err) {
     console.log(`ERROR, cont/getLoginMyRestaurant, ${err.message} `);
     res.json({ state: "fail", message: err.message });
+    // res.redirect("/resto/login")
   }
 };
 
@@ -66,14 +67,15 @@ restaurantController.loginProcess = async (req, res) => {
       member = new Member(),
       result = await member.loginData(data);
 
-    req.session.member = result;
+    req.session.member = result; //session ichida member obj hosil qilib resultni yuklaymiz
     req.session.save(() => {
       result.mb_type === "ADMIN"
         ? res.redirect("/resto/all-restourant")
         : res.redirect("/resto/products/menu");
     });
   } catch (err) {
-    res.json({ state: "fail", message: err.message });
+    // res.json({ state: "fail", message: err.message });
+    res.redirect("/resto/login");
     console.log(`ERROR, cont/login, ${err.message} `);
   }
 };
