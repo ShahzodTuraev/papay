@@ -186,6 +186,9 @@ body {
   display: flex;
   flex-direction: column;
 }
+.media-frame .upload_container label {
+  cursor: pointer;
+}
 .media_text {
   font-family: "GT Walsheim Pro";
   font-style: normal;

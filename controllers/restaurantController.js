@@ -45,7 +45,7 @@ restaurantController.signupProcess = async (req, res) => {
     new_member.mb_image = req.file.path;
     const member = new Member(),
       result = await member.signupData(new_member);
-    assert(result, Definer.general_err1);
+    assert.ok(result, Definer.general_err1);
 
     req.session.member = result; //app js da yasalgan session = memberiga signup data= resultini save qilamiz.
     res.redirect("/resto/products/menu");
@@ -87,8 +87,15 @@ restaurantController.loginProcess = async (req, res) => {
 };
 
 restaurantController.logout = (req, res) => {
-  console.log("GET cont.logout");
-  res.send("we are in logout page");
+  try {
+    console.log("GET cont/logout");
+    req.session.destroy(function () {
+      res.redirect("/resto");
+    });
+  } catch (err) {
+    res.redirect("/resto/login");
+    console.log(`ERROR, cont/login, ${err.message} `);
+  }
 };
 
 restaurantController.validateAuthRestaurant = (req, res, next) => {
