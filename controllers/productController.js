@@ -26,7 +26,7 @@ productController.addNewProduct = async (req, res) => {
     // yuqorida req fileni ichidagi filepathni array qilib request bodyga qo'shib beradi.
     const result = await product.addNewProductData(data, req.member);
     const html = `<script>
-                    alert(new dish added successfully)
+                    alert(new product added successfully)
                     window.location.replace('/resto/products/menu')
                   </sctipt>`;
     res.end(html);
