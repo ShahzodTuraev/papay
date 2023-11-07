@@ -37,7 +37,7 @@
               <td><%= value.mb_phone %></td>
               <td style="width: 13%">
                 <label class="switch">
-                  <input type="checkbox" class="mb_top" id="value._id" <%
+                  <input type="checkbox" class="mb_top" id="<%= value._id %>" <%=
                   value.mb_top === 'Y' ? 'checked' : '' %>/>
                   <span class="slider round"></span>
                 </label>
@@ -56,5 +56,21 @@
       </div>
     </div>
   </div>
+  <script>
+    $(function(){
+        //manipulate restaurants top features
+        $(".mb_top").on("change", (e)=>{
+            const id = e.target.id;
+            const mb_top = e.target.checked ? "Y" : "N";
+            axios.post('/resto/all-restaurant/edit', {id: id, mb_top: mb_top})
+            .then(response=>{
+                const result = response.data; // buning ichida res.jsonni ichidagi narsa beriladi.
+                if(result.state === 'success') alert("Successfully updated!")
+                else alert(result.message)
+            })
+            .catch(err=> console.log(err))
+        })
+    })
+  </script>
 </body>
 <%-include('includes/footer')%>
