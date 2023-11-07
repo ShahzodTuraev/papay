@@ -2,6 +2,7 @@ const assert = require("assert");
 const Member = require("../models/Member");
 const Product = require("../models/Product");
 const Definer = require("../lib/mistake");
+const Restaurant = require("../models/Restaurant");
 // controller butun proccessni boshqarib, tegishli madellarga vazifa yuklaydi.
 let restaurantController = module.exports; //memberControllerga turli xil metodlarni yuklash mumkin
 
@@ -133,8 +134,10 @@ restaurantController.validateAdmin = (req, res, next) => {
 restaurantController.getAllRestaurants = async (req, res) => {
   try {
     console.log("GET cont/getAllRestaurants");
-    // to do : hamma restaurantlarni dbdan chaqiramiz
-    res.render("all-restaurants");
+    const restaurant = new Restaurant();
+    const restaurant_data = await restaurant.getAllRestaurantsData();
+    // restaurant service modeldan kelayotgan datani res renderga pass qilamiz
+    res.render("all-restaurants", { restaurants_data: restaurant_data });
   } catch (err) {
     console.log(`ERROR, cont/getAllRestaurants, ${err.message} `);
     res.json({ state: "fail", message: err.message });
