@@ -21,7 +21,8 @@ productController.addNewProduct = async (req, res) => {
     let data = req.body; //req.bodyni ichida file path yoq. U reqfilesni ichida keladi.
     console.log(req.files);
     data.product_images = req.files.map((ele) => {
-      return ele.path;
+      // return ele.path;
+      return ele.path.replace(/\\/g, "/");
     });
     // yuqorida req fileni ichidagi filepathni array qilib request bodyga qo'shib beradi.
     const result = await product.addNewProductData(data, req.member);
