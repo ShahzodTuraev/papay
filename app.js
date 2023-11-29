@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const router = require("./router");
 const router_bssr = require("./router_bssr");
+const cookieParser = require("cookie-parser");
 
 let session = require("express-session");
 const MongoDbStore = require("connect-mongodb-session")(session); //mongoDB storagesini hosil qilishda yordam beradi. uni ichiga express - sessionni beramiz. MongoDb Storage bu class.
@@ -16,6 +17,7 @@ const store = new MongoDbStore({
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false })); //formdan post qilingan narsalarni express qabul qiladi.
+app.use(cookieParser());
 
 // 2 Session larga bog'liq bo'lgan codelar yoziladi Requestni ichida sessionlarni hosil qilib beradi.
 app.use(
