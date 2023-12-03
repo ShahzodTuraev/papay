@@ -12,9 +12,9 @@ const viewScheme = new mongoose.Schema(
     },
     bo_id: {
       type: String,
-      required: false,
+      required: false, //faqat communityga daxldor, product memberda bo'lmaydi.
       enum: {
-        values: board_id_enum_list,
+        values: board_id_enum_list, //Bu view aynan communityning qaysi bordiga tegishliligini bildirib beradi
       },
     },
   },

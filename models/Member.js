@@ -34,7 +34,7 @@ class Member {
         .findOne({ mb_nick: input.mb_nick }, { mb_nick: 1, mb_password: 1 }) //pasword shuni quymasa kelmaydi. negaki sxema modulda password kelmasin deb mantiq qushganmiz.
         .exec();
       assert.ok(member, Definer.auth_err3);
-      console.log(member);
+
       const isMatch = await bcrypt.compare(
         input.mb_password,
         member.mb_password
@@ -48,17 +48,18 @@ class Member {
   }
 
   async getChosenMemberData(member, id) {
+    //member- bizni token qilish uchun kiritgan ma'lumotimiz ya'ni kichik obj bor-ku..
     try {
       id = shapeIntoMongooseObjectId(id);
       console.log("member: :", member);
       if (member) {
-        await this.viewChosenItemByMember(member, id, "member");
+        await this.viewChosenItemByMember(member, id, "member"); //member-qaysi turdagi itemni tomosha qilyapman
         // condition if not seen before
       }
       const result = await this.memberModel
         .aggregate([
           { $match: { _id: id, mb_status: "ACTIVE" } },
-          { $unset: "mb_password" },
+          { $unset: "mb_password" }, //agregate schemaga buysunmaydi. mb_passwordni olib bermaydi
         ])
         .exec();
 
@@ -74,13 +75,12 @@ class Member {
       view_ref_id = shapeIntoMongooseObjectId(view_ref_id);
       const mb_id = shapeIntoMongooseObjectId(member._id);
       const view = new View(mb_id);
-      // validation needed
+      // validation needed. Korilayotgan target haqiqatda mavjudmi?
       const isValid = await view.validateChosenTarger(view_ref_id, group_type);
       assert.ok(isValid, Definer.general_err2);
 
       // logged user has seen target before
       const doesExist = await view.checkViewExistence(view_ref_id);
-      console.log("doesExist : ", doesExist);
 
       if (!doesExist) {
         const result = await view.insertMemberView(view_ref_id, group_type);

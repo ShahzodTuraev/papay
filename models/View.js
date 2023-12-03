@@ -3,6 +3,7 @@ const ViewModel = require("../schema/view.model");
 
 class View {
   constructor(mb_id) {
+    //qassi odam bizni tomosha qilyapti mb id.
     this.viewModel = ViewModel;
     this.memberModel = memberModel;
     this.mb_id = mb_id;
@@ -12,9 +13,9 @@ class View {
     try {
       let result;
       switch (group_type) {
-        case "member":
+        case "member": //hozrcha memberni uzini quyganimiz u-n bitta case
           result = await this.memberModel
-            .findById({
+            .findOne({
               _id: view_ref_id,
               mb_status: "ACTIVE",
             })

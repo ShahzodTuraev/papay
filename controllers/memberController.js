@@ -46,6 +46,7 @@ memberController.login = async (req, res) => {
 memberController.logout = (req, res) => {
   console.log("GET cont/logout");
   res.cookie("access_token", null, { maxAge: 0, httpOnly: true });
+  //cookie ni ichidagi access_tokenning qiymatini null qilib ber maxAgeni tugatib ber.
   res.json({ state: "succeed", data: "logout successfully!" });
 };
 
@@ -85,6 +86,7 @@ memberController.getChosenMember = async (req, res) => {
     const id = req.params.id;
     const member = new Member();
     const result = await member.getChosenMemberData(req.member, id);
+    // req.member- kim bu requestni amalga oshiryapti, id - kimning datasini ko'rmoqchimiz
     res.json({ state: "succeed", data: result });
   } catch (err) {
     console.log(`ERROR, cont/getChosenMember, ${err.message}`);
@@ -96,9 +98,10 @@ memberController.retrieveAuthMember = (req, res, next) => {
   try {
     const token = req.cookies["access_token"];
     req.member = token ? jwt.verify(token, process.env.SECRET_TOKEN) : null;
+    // requestning ichida member degan obj xosil qilib olyabmiz. Member validationni check qilish mantig'ini qilamiz.
     next();
   } catch (err) {
     console.log(`ERROR, cont/retriveAuthMember, ${err.message}`);
-    next();
+    next(); //utib ketaveradi. Lekin errorni ko'rsatib beradi.
   }
 };

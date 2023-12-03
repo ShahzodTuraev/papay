@@ -16,7 +16,7 @@ class Product {
         match["restaurant_mb_id"] = shapeIntoMongooseObjectId(
           data.restaurant_mb_id
         );
-        match["product_collection"] = data.product_collection;
+        match["product_collection"] = data.product_collection; //fataq bitta restoranga tegishli taomlar 
       }
       const sort =
         data.order === "product_price"
