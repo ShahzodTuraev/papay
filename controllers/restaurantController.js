@@ -6,6 +6,23 @@ const Restaurant = require("../models/Restaurant");
 // controller butun proccessni boshqarib, tegishli madellarga vazifa yuklaydi.
 let restaurantController = module.exports; //memberControllerga turli xil metodlarni yuklash mumkin
 
+restaurantController.getRestaurants = async (req, res) => {
+  try {
+    console.log("GET: cont/getRestaurants");
+    const data = req.query,
+      restaurant = new Restaurant(),
+      result = await restaurant.getRestaurantsData(req.member, data);
+
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/home, ${err.message} `);
+    res.json({ state: "fail", message: err.message });
+  }
+};
+
+/**************************************
+ *      BSSR RELATED METHODS          *
+ *************************************/
 restaurantController.home = async (req, res) => {
   try {
     console.log("GET: cont/home");
@@ -113,7 +130,7 @@ restaurantController.validateAuthRestaurant = (req, res, next) => {
 
 restaurantController.checkSessions = (req, res) => {
   if (req.session?.member) {
-    res.json({ state: "succeed", data: req.session.member });
+    res.json({ state: "success", data: req.session.member });
   } else {
     res.json({ state: "fail", message: "You are not authenticated" });
   }
