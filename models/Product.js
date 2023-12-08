@@ -12,7 +12,7 @@ class Product {
   async getAllProductsData(member, data) {
     try {
       const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
-      let match = { product_status: "PROCESS" };
+      let match = { product_status: "PROCESS" }; //matching obj yasaymiz
       if (data.restaurant_mb_id) {
         match["restaurant_mb_id"] = shapeIntoMongooseObjectId(
           data.restaurant_mb_id

@@ -22,6 +22,7 @@ productController.getChosenProduct = async (req, res) => {
     const product = new Product(),
       id = req.params.id,
       result = await product.getChosenProductData(req.member, id);
+    // product schema Promise based obj bolgani uchun await bn ishlatiladi.
     res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/getChosenProduct, ${err.message} `);
