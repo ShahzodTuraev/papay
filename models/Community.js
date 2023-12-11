@@ -47,6 +47,7 @@ class Community {
               as: "member_data", //qaysi nom bilan hosil qilmoqchimiz
             },
           },
+          { $unwind: "$member_data" }, //ichida bitta obj data buladigan arrayni objsini olib to'g'ridan to'g'ri member_dataning ichiga qo'yib ber
         ])
         .exec();
       assert.ok(result, Definer.article_err2);
