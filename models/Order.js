@@ -30,7 +30,6 @@ class Order {
       );
       console.log("order_id:::", order_id);
 
-      //TODO:  order items creation
       await this.recordOrderItemsData(order_id, data);
 
       return order_id;
@@ -58,7 +57,7 @@ class Order {
   async recordOrderItemsData(order_id, data) {
     try {
       const pro_list = data.map(async (item) => {
-        return await this.saveOrderItemsData(item, order_id);
+        return await this.saveOrderItemsData(item, order_id); //ichidagi awaitlarni hammasini tugaashini kutamiz
       });
       const results = await Promise.all(pro_list);
       console.log("results:::", results);
@@ -99,9 +98,9 @@ class Order {
           { $sort: { createdAt: -1 } },
           {
             $lookup: {
-              from: "orderitems",
+              from: "orderitems", //collectiondan
               localField: "_id",
-              foreignField: "order_id",
+              foreignField: "order_id", //order itemsga tegishli bolgan fileld
               as: "order_items",
             },
           },
@@ -109,7 +108,7 @@ class Order {
             $lookup: {
               from: "products",
               localField: "order_items.product_id",
-              foreignField: "_id",
+              foreignField: "_id", //product collectiondagi id
               as: "product_data",
             },
           },
