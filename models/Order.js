@@ -127,11 +127,10 @@ class Order {
         order_status = data.order_status.toUpperCase();
 
       const result = await this.orderModel.findOneAndUpdate(
-        { mb_id: mb_id, _id: order_id },
+        { mb_id: mb_id, _id: order_id }, //filtering query mechanism
         { order_status: order_status },
-        { runValidators: true, lean: true, returnDocument: "after" }
+        { runValidators: true, lean: true, returnDocument: "after" } //options
       );
-      console.log(result);
       assert.ok(result, Definer.order_err3);
       return result;
     } catch (err) {
