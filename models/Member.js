@@ -8,6 +8,7 @@ const MemberModel = require("../schema/member.model");
 const assert = require("assert");
 const bcrypt = require("bcryptjs");
 const View = require("./View");
+const Like = require("./Like");
 class Member {
   constructor() {
     this.memberModel = MemberModel; //(aslida mongodb= classi)
@@ -22,7 +23,7 @@ class Member {
       try {
         result = await new_member.save();
       } catch (mongo_err) {
-        throw new Error(Definer.auth_err1);
+        throw new Error(Definer.mongo_validation_err1);
       }
       result.mb_password = "";
       return result;
@@ -95,6 +96,30 @@ class Member {
     } catch (err) {
       throw err;
     }
+  }
+
+  async likeChosenItemByMember(member, like_ref_id, group_type) {
+    const mb_id = shapeIntoMongooseObjectId(member._id);
+    like_ref_id = shapeIntoMongooseObjectId(like_ref_id);
+
+    const like = new Like(mb_id);
+    const isValid = await like.validateChosenTargetItem(
+      like_ref_id,
+      group_type
+    );
+    assert.ok(isValid, Definer.general_err2);
+    // doesExist
+    const doesExist = await like.checkLikeExistence(like_ref_id);
+    let data = doesExist
+      ? await like.removeMemberLike(like_ref_id, group_type)
+      : await like.insertMemberLike(like_ref_id, group_type);
+    assert.ok(data, Definer.general_err1);
+    const result = {
+      like_group: data.like_group,
+      like_ref_id: data.like_ref_id,
+      like_status: doesExist ? 0 : 1,
+    };
+    return result;
   }
 }
 
