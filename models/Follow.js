@@ -123,7 +123,7 @@ class Follow {
         page = inquery.page * 1,
         limit = inquery.limit * 1;
 
-      let aggregateQuery = [
+      let aggregationQuery = [
         { $match: { follow_id: follow_id } },
         { $sort: { createdAt: -1 } },
         { $skip: (page - 1) * limit },
@@ -140,9 +140,11 @@ class Follow {
       ];
       // following followed back to subscriber
       if (member && member._id === inquery.mb_id) {
-        aggregateQuery.push(lookup_auth_member_following(follow_id, "follows"));
+        aggregationQuery.push(
+          lookup_auth_member_following(follow_id, "follows")
+        );
       }
-      const result = await this.followModel.aggregate(aggregateQuery).exec();
+      const result = await this.followModel.aggregate(aggregationQuery).exec();
       assert.ok(result, Definer.follow_err3);
       return result;
     } catch (err) {

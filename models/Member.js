@@ -2,6 +2,7 @@
 const {
   shapeIntoMongooseObjectId,
   lookup_auth_member_following,
+  lookup_auth_member_liked,
 } = require("../lib/config");
 const Definer = require("../lib/mistake");
 const MemberModel = require("../schema/member.model");
@@ -56,18 +57,18 @@ class Member {
     try {
       const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
       id = shapeIntoMongooseObjectId(id);
-      let aggregateQuery = [
+      let aggregationQuery = [
         { $match: { _id: id, mb_status: "ACTIVE" } },
         { $unset: "mb_password" },
       ];
       if (member) {
         await this.viewChosenItemByMember(member, id, "member"); //member-qaysi turdagi itemni tomosha qilyapman
-        //todo: Check auth member product liked chosen member
-        aggregateQuery.push(
+        aggregationQuery.push(lookup_auth_member_liked(auth_mb_id));
+        aggregationQuery.push(
           lookup_auth_member_following(auth_mb_id, "members")
         );
       }
-      const result = await this.memberModel.aggregate(aggregateQuery).exec();
+      const result = await this.memberModel.aggregate(aggregationQuery).exec();
 
       assert.ok(result, Definer.general_err2);
       return result[0];

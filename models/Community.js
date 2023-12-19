@@ -2,6 +2,7 @@ const BoArticleModel = require("../schema/bo_article.model");
 const {
   shapeIntoMongooseObjectId,
   board_id_enum_list,
+  lookup_auth_member_liked,
 } = require("../lib/config");
 const Definer = require("../lib/mistake");
 const assert = require("assert");
@@ -52,6 +53,7 @@ class Community {
             },
           },
           { $unwind: "$member_data" }, //ichida bitta obj data buladigan arrayni objsini olib to'g'ridan to'g'ri member_dataning ichiga qo'yib ber
+          lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
       assert.ok(result, Definer.article_err2);
@@ -88,7 +90,7 @@ class Community {
             },
           },
           { $unwind: "$member_data" },
-          //todo: check auth member liked the chosen target
+          lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
       console.log("result: ::", result);
