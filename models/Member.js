@@ -24,6 +24,7 @@ class Member {
       try {
         result = await new_member.save();
       } catch (mongo_err) {
+        console.log(mongo_err);
         throw new Error(Definer.mongo_validation_err1);
       }
       result.mb_password = "";
