@@ -17,8 +17,8 @@ mongoose.connect(
       console.log("MongoDB connection success");
       // console.log(goose);
 
-      const app = require("./app");
-      const server = http.createServer(app); // single thread shu yerda
+      const server = require("./app");
+
       let PORT = process.env.PORT || 3003;
       server.listen(PORT, () => {
         console.log(

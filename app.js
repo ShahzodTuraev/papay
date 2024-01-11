@@ -1,3 +1,4 @@
+const http = require("http");
 console.log("Web serverni boshlash");
 const express = require("express");
 const app = express();
@@ -52,4 +53,32 @@ app.set("view engine", "ejs");
 app.use("/resto", router_bssr); //for  BSSR
 app.use("/", router); // for restAPI ::: har qanday kelgan requestni router filega yubor;
 
-module.exports = app;
+const server = http.createServer(app); // single thread shu yerda
+// SOCKET.IO BACKEND SERVER
+const io = require("socket.io")(server, {
+  serveClient: false,
+  origins: "*:*",
+  transport: ["websocket", "xhr-polling"],
+});
+
+let online_users = 0;
+io.on("connection", function (socket) {
+  online_users++;
+  console.log("New user, total:", online_users);
+  socket.emit("greetMsg", { text: "welcome" });
+  io.emit("infoMsg", { total: online_users });
+  socket.on("disconnect", function () {
+    online_users--;
+    socket.broadcast.emit("infoMsg", { total: online_users });
+    console.log("client disconnected, total:", online_users);
+  });
+
+  socket.on("createMsg", function (data) {
+    console.log(data);
+    io.emit("newMsg", data);
+  });
+  // socket.emit() // faqatgina ulangan odamga junatilgan xabar
+  // socket.broadcast.emit()// ulangan userdan tashqari qolgan userlarga jo'natiladigan xabar
+  // io.emit()//hammage
+});
+module.exports = server;
